@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsersFetch, selectAllUsers, selectSingleUser, getSingleUserFetch, selectSearchedUser, getSearchUsersFetch } from './features/githubUsers/userSlice';
+import { getAllUsersFetch, selectAllUsers, selectSingleUser, getSingleUserFetch, selectSearchedUser, getSearchUsersFetch, selectUserFollowers, getFollowersForUserFetch } from './features/githubUsers/userSlice';
 
 function App() {
 
@@ -11,6 +11,7 @@ function App() {
   const users=useSelector(selectAllUsers)
   const singleUser=useSelector(selectSingleUser)
   const searchedUser=useSelector(selectSearchedUser)
+  const followers=useSelector(selectUserFollowers)
 /* A hook that allows you to dispatch actions to the Redux store. */
   const dispatch=useDispatch();
 
@@ -22,10 +23,12 @@ function App() {
     dispatch(getSingleUserFetch('ahsan'))
     //* this is the dispatch function to get searched user from github and it is working
     dispatch(getSearchUsersFetch('ahsan'))
+
+    dispatch(getFollowersForUserFetch('ahsan'))
   },[dispatch])
 
   // console.log(users);
-  console.log(searchedUser);
+  console.log(followers);
 
 
 

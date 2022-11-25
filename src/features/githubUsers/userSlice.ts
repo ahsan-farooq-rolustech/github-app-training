@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UsersModel } from "../../models/UsersModel";
+import { UsersModel } from '../../models/UsersModel';
 import { RootState } from "../../app/store";
 import { SearchUsersModel } from "../../models/SearchUserModel";
 
@@ -8,6 +8,7 @@ export interface UsersState {
   allUsers: Array<UsersModel>;
   user: UsersModel | null;
   searchedUser: SearchUsersModel | null;
+  followers:Array<UsersModel>|null;
   isLoading: boolean;
 }
 
@@ -15,6 +16,7 @@ const initialState: UsersState = {
   allUsers: [],
   user: null,
   searchedUser: null,
+  followers: [],
   isLoading: false,
 };
 
@@ -23,49 +25,59 @@ export const usersSlice = createSlice({
   name: "usersSlice",
   initialState,
   reducers: {
-    /* A reducer that is used to set the isLoading property of the state to true. */
+    
     getAllUsersFetch: (state) => {
       state.isLoading = true;
     },
-    /* A reducer that is used to set the isLoading property of the state to false and set the allUsers
-property of the state to the payload of the action. */
+    
     getAllUsersSuccess: (state, action: PayloadAction<Array<UsersModel>>) => {
       state.allUsers = action.payload;
       state.isLoading = false;
     },
-    /* A reducer that is used to set the isLoading property of the state to false. */
+   
     getAllUsersFailure: (state) => {
       state.isLoading = false;
     },
-    /* A reducer that is used to set the isLoading property of the state to true. */
+   
     getSingleUserFetch: (state, action: PayloadAction<string>) => {
       state.isLoading = true;
       console.log(action.payload);
     },
-    /* A reducer that is used to set the isLoading property of the state to false and set the user property
-of the state to the payload of the action. */
+   
     getSingleUserSuccess: (state, action: PayloadAction<UsersModel>) => {
       state.user = action.payload;
       state.isLoading = false;
     },
-    /* A reducer that is used to set the isLoading property of the state to false. */
+   
     getSingleUserFailure: (state) => {
       state.isLoading = false;
     },
-    /* A reducer that is used to set the isLoading property of the state to true. */
+
     getSearchUsersFetch: (state, action: PayloadAction<string>) => {
       state.isLoading = true;
     },
-    /* A reducer that is used to set the isLoading property of the state to false and set the searchedUser
-property of the state to the payload of the action. */
+
     getSearchUsersSuccess: (state, action: PayloadAction<SearchUsersModel>) => {
       state.isLoading = false;
       state.searchedUser = action.payload;
     },
-    /* A reducer that is used to set the isLoading property of the state to false. */
+    
     getSearchUserFailure: (state) => {
       state.isLoading = false;
     },
+
+    getFollowersForUserFetch:(state,action:PayloadAction<string>)=>{
+      state.isLoading = true;
+    },
+
+    getFollowersForUserSuccess:(state,action:PayloadAction<Array<UsersModel>>)=>{
+      state.isLoading = false;
+      state.followers = action.payload
+    },
+
+    getFollowersForUserFailure:(state) => {
+      state.isLoading = false;
+    }
   },
 });
 
@@ -81,10 +93,15 @@ export const {
   getSingleUserSuccess,
   getSingleUserFailure,
 
-  /* Exporting the searched user actions from the slice. */
+  /* Exporting the search user actions from the slice. */
   getSearchUserFailure,
   getSearchUsersFetch,
   getSearchUsersSuccess,
+
+  /* Exporting the search user actions from the slice. */
+  getFollowersForUserFetch,
+  getFollowersForUserFailure,
+  getFollowersForUserSuccess,
 } = usersSlice.actions;
 
 /**
@@ -105,6 +122,12 @@ export const selectSingleUser = (state: RootState) => state.user.user;
  * @param {RootState} state - RootState - this is the state of the entire application.
  */
 export const selectSearchedUser = (state: RootState) => state.user.searchedUser;
+
+/**
+ * It takes the state object and returns the user.followers property
+ * @param {RootState} state - RootState - this is the state of the entire application.
+ */
+export const selectUserFollowers = (state: RootState) => state.user.followers;
 
 /* Exporting the reducer from the slice. */
 export default usersSlice.reducer;
