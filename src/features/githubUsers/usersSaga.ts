@@ -1,17 +1,19 @@
-import { call, CallEffect, put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 import { UsersModel } from "../../models/UsersModel";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import {
   getAllUsersFailure,
   getAllUsersSuccess,
+  getFollowersForUserFailure,
+  getFollowersForUserSuccess,
   getSearchUserFailure,
   getSearchUsersSuccess,
   getSingleUserFailure,
   getSingleUserSuccess,
 } from "./userSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { SearchUsersModel } from '../../models/SearchUserModel';
+import { SearchUsersModel } from "../../models/SearchUserModel";
 
 /* It's a configuration for the request. */
 let headersList = {
@@ -29,10 +31,29 @@ let reqOptions: AxiosRequestConfig = {
 const getAllUsers = () =>
   axios.get<Array<UsersModel>>("https://api.github.com/users", reqOptions);
 
+/**
+ * GetSingleUser is a function that takes a string and returns a promise that resolves to a UsersModel
+ * @param {string} userName - string
+ */
 const getSingleUser = (userName: string) =>
   axios.get<UsersModel>(`https://api.github.com/users/${userName}`, reqOptions);
 
-const getSearchUsers=(query:string)=>axios.get<SearchUsersModel>(`https://api.github.com/search/users?q=${query}`,reqOptions)
+/**
+ * GetSearchUsers is a function that takes a string as an argument and returns a promise that resolves
+ * to an array of SearchUsersModel objects
+ * @param {string} query - The search query.
+ */
+const getSearchUsers = (query: string) =>
+  axios.get<SearchUsersModel>(
+    `https://api.github.com/search/users?q=${query}`,
+    reqOptions
+  );
+
+const getUserFollowers = (userName: string) =>
+  axios.get<UsersModel>(
+    `https://api.github.com/users/${userName}/followers`,
+    reqOptions
+  );
 
 /* A generator function that yeilds all the users from girhub. */
 function* WorkGetAllUsers(): any {
@@ -61,10 +82,23 @@ function* workGetSingleUser(action: PayloadAction<string>): any {
 /* A generator function that yeilds searched user from girhub. */
 function* workGetSearchedUsers(action: PayloadAction<string>): any {
   try {
-    const response:AxiosResponse<SearchUsersModel, any> = yield getSearchUsers(action.payload);
-    yield put(getSearchUsersSuccess(response.data))
+    const response: AxiosResponse<SearchUsersModel, any> = yield getSearchUsers(
+      action.payload
+    );
+    yield put(getSearchUsersSuccess(response.data));
   } catch (error) {
     yield put(getSearchUserFailure());
+  }
+}
+
+function* workGetUserFollowers(action: PayloadAction<string>): any {
+  try {
+    const response: AxiosResponse<Array<UsersModel>> = yield getUserFollowers(
+      action.payload
+    );
+    yield put(getFollowersForUserSuccess(response.data));
+  } catch (error) {
+    yield put(getFollowersForUserFailure());
   }
 }
 
@@ -73,6 +107,7 @@ function* usersSaga() {
   yield takeEvery("usersSlice/getAllUsersFetch", WorkGetAllUsers);
   yield takeEvery("usersSlice/getSingleUserFetch", workGetSingleUser);
   yield takeEvery("usersSlice/getSearchUsersFetch", workGetSearchedUsers);
+  yield takeEvery("usersSlice/getFollowersForUserFetch", workGetUserFollowers);
 }
 
 export default usersSaga;
