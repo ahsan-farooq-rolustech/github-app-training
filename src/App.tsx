@@ -3,27 +3,29 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllUsersFetch, selectAllUsers, selectSingleUser,getSingleUserFetch } from './features/githubUsers/userSlice';
+import { getAllUsersFetch, selectAllUsers, selectSingleUser, getSingleUserFetch, selectSearchedUser, getSearchUsersFetch } from './features/githubUsers/userSlice';
 
 function App() {
 
 /* Using the selector to get the users from the store. */
   const users=useSelector(selectAllUsers)
   const singleUser=useSelector(selectSingleUser)
+  const searchedUser=useSelector(selectSearchedUser)
 /* A hook that allows you to dispatch actions to the Redux store. */
   const dispatch=useDispatch();
 
 /* A hook that allows you to perform side effects in function components. */
   useEffect(() => {
-    //* this is the API to get all the users from github and it is working 
+    //* this is the dispatch function to get all the users from github and it is working 
     dispatch(getAllUsersFetch())
-    //* this is the API to get singleUser from github and it is working
+    //* this is the dispatch function to get single User from github and it is working
     dispatch(getSingleUserFetch('ahsan'))
-    
+    //* this is the dispatch function to get searched user from github and it is working
+    dispatch(getSearchUsersFetch('ahsan'))
   },[dispatch])
 
   // console.log(users);
-  console.log(singleUser);
+  console.log(searchedUser);
 
 
 

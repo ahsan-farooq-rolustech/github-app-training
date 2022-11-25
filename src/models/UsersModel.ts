@@ -19,7 +19,7 @@ export interface UsersModel {
     site_admin:          boolean;
 }
 
-export enum Type {
+enum Type {
     Organization = "Organization",
     User = "User",
 }
