@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import { useEffect } from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllUsersFetch, selectAllUsers, selectSingleUser, getSingleUserFetch, selectSearchedUser, getSearchUsersFetch, selectUserFollowers, getFollowersForUserFetch } from './features/githubUsers/userSlice';
-import UserTable from './components/userTable/UserTable';
 import Home from './features/Home/Home';
+import {Route,Routes} from 'react-router-dom'
+
+
 
 function App() {
 
@@ -37,7 +37,9 @@ function App() {
   return (
     <div className="App">
       {/* <UserTable data={users} height={400} width={'100%'} /> */}
-      <Home/>
+      <Routes>
+        <Route  path='/' element={<Home/>}/>
+      </Routes>
     </div>
   );
 }
