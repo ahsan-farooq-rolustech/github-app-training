@@ -1,10 +1,11 @@
 export interface SearchUsersModel {
+    discriminator: 'searchUserModel';
     total_count:        number;
     incomplete_results: boolean;
-    items:              Item[];
+    items:              SearchUserModelItem[];
 }
 
-interface Item {
+export interface SearchUserModelItem {
     login:               string;
     id:                  number;
     node_id:             string;
@@ -21,11 +22,11 @@ interface Item {
     repos_url:           string;
     events_url:          string;
     received_events_url: string;
-    type:                Type;
+    type:                SearchUserModelType;
     site_admin:          boolean;
     score:               number;
 }
 
-enum Type {
+export enum SearchUserModelType {
     User = "User",
 }
