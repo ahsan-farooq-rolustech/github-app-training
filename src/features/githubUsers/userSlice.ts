@@ -1,12 +1,14 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { UsersModel } from '../../models/UsersModel';
 import { RootState } from "../../app/store";
 import { SearchUsersModel } from "../../models/SearchUserModel";
+import { SingleUserModel } from '../../models/SingleUserModel';
 
 /* Defining the state of the reducer. */
 export interface UsersState {
   allUsers: Array<UsersModel>;
   user: UsersModel | null;
+  singleUser:SingleUserModel|null;
   searchedUser: SearchUsersModel | null;
   followers:Array<UsersModel>|null;
   isLoading: boolean;
@@ -15,6 +17,7 @@ export interface UsersState {
 const initialState: UsersState = {
   allUsers: [],
   user: null,
+  singleUser: null,
   searchedUser: null,
   followers: [],
   isLoading: false,
@@ -44,8 +47,8 @@ export const usersSlice = createSlice({
       console.log(action.payload);
     },
    
-    getSingleUserSuccess: (state, action: PayloadAction<UsersModel>) => {
-      state.user = action.payload;
+    getSingleUserSuccess: (state, action: PayloadAction<SingleUserModel>) => {
+      state.singleUser = action.payload;
       state.isLoading = false;
     },
    
@@ -115,7 +118,7 @@ export const selectAllUsers = (state: RootState) => state.user.allUsers;
  * It takes the state object and returns the user object from the user reducer
  * @param {RootState} state - RootState - this is the state of the entire application.
  */
-export const selectSingleUser = (state: RootState) => state.user.user;
+export const selectSingleUser = (state: RootState) => state.user.singleUser;
 
 /**
  * It takes the state and returns the searchedUser property of the user slice of the state

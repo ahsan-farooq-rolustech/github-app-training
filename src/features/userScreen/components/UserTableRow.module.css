@@ -1,0 +1,18 @@
+.table {  
+    width:650;
+  }
+
+  .container {
+    text-align: center;
+    display: flex;  
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    padding-top: 100px;
+  }
+  
+  .rowStyle {
+    background-color: #D7D3D3;  
+    padding: 15px;
+    border: solid white 5px;
+  }

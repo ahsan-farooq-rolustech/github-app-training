@@ -14,6 +14,7 @@ import {
 } from "./userSlice";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { SearchUsersModel } from "../../models/SearchUserModel";
+import { SingleUserModel } from '../../models/SingleUserModel';
 
 /* It's a configuration for the request. */
 let headersList = {
@@ -70,7 +71,7 @@ function* WorkGetAllUsers(): any {
 function* workGetSingleUser(action: PayloadAction<string>): any {
   console.log(action.payload);
   try {
-    const response: AxiosResponse<UsersModel, any> = yield getSingleUser(
+    const response: AxiosResponse<SingleUserModel, any> = yield getSingleUser(
       action.payload
     );
     yield put(getSingleUserSuccess(response.data));
